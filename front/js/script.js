@@ -7,17 +7,17 @@ async function getArticles() {
 }
 getArticles()
 .then(function(products){
-  const items = document.getElementById("items") //Fonction pour afficher nom produits
-  for (let i=0; i<products.length;i++) {
+  const items = document.getElementById("items") //On accède aux éléments du DOM à partir de son id
+  for (let i=0; i<products.length;i++) { // Boucle 
   var product = products[i]
-    items.innerHTML += `
+    items.innerHTML += ` 
 <a href="./product.html?id=42">
     <article>
-      <img src="${product.imageUrl}" alt="${product.altTxt}">
+      <img src="${product.imageUrl}" alt="${product.altTxt}"> 
       <h3 class="productName">${product.name}</h3>
       <p class="productDescription">${product.description}</p>
     </article>
-  </a>
-    `
+  </a> 
+    ` 
   }
 })
