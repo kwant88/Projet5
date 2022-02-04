@@ -11,7 +11,7 @@ getArticles()
   for (let i=0; i<products.length;i++) { // Boucle 
   var product = products[i]
     items.innerHTML += ` 
-<a href="./product.html?id=42">
+<a href="./product.html?id=${product._id}">
     <article>
       <img src="${product.imageUrl}" alt="${product.altTxt}"> 
       <h3 class="productName">${product.name}</h3>
