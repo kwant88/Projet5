@@ -42,6 +42,7 @@ fetch("http://localhost:3000/api/products/" + idProduct)
       colors.innerHTML += `<option value="${color}">${color}</option> `
     }
 
+
     var bouton = document.getElementById("addToCart");
 
     bouton.addEventListener("click",function(){ //On surveille les clicks du bouton panier
@@ -58,12 +59,51 @@ const quantity = document.getElementById("quantity");
 else if (quantity.value >100){
     alert ("Veuillez insérer un nombre inférieur à 100")
     return
+};
+
+let choixProduit = {
+    idProduit: idProduct,
+    couleurProduit: colors.value,
+    quantiteProduit: parseInt(quantity.value),
+    nomProduit: product.name,
+    prixProduit: product.price,
+    descriptionProduit: product.description,
+    imgProduit: product.imageUrl,
+    altImgProduit: product.altTxt
+};
+    console.log(idProduct, colors.value, product.name, product.price, quantity, product.imageUrl, product.altTxt);
+
+//Initialisation du local storage
+
+let produitLocalStorage = JSON.parse(localStorage.getItem("produit")); //On transforme l'objet en chaine de caractères
+console.log(produitLocalStorage)
+if (!produitLocalStorage){  //Si produit non déclaré alors tableau vide
+produitLocalStorage =[]
 }
+    const foundProduct = produitLocalStorage.find((produit) => {
+        if (produit.couleurProduit === colors.value && produit.idProduit === idProduct)
+        {
+            return produit
+        }
+    } )
+    console.log(foundProduct)
+    if(foundProduct){
+
+foundProduct.quantiteProduit +=parseInt(quantity.value)
+ 
+    }
+else {  
+    produitLocalStorage.push(choixProduit)
+}
+localStorage.setItem ("produit",JSON.stringify(produitLocalStorage)) //On met a jour le local storage
+
+      alert('Le produit a été ajouté au panier');
+    
     })
+
+    
 
 }
 
 );          
-
-
 
