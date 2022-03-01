@@ -65,11 +65,7 @@ let choixProduit = {
     idProduit: idProduct,
     couleurProduit: colors.value,
     quantiteProduit: parseInt(quantity.value),
-    nomProduit: product.name,
-    prixProduit: product.price,
-    descriptionProduit: product.description,
-    imgProduit: product.imageUrl,
-    altImgProduit: product.altTxt
+    
 };
     console.log(idProduct, colors.value, product.name, product.price, quantity, product.imageUrl, product.altTxt);
 
