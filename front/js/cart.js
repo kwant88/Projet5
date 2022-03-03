@@ -5,13 +5,30 @@ const positionEmptyCart = document.querySelector("#cart__items");
 
 let totalPrice = 0
 
+function getTotalsQtt() {
+    // Total des quantités
+    
+    
+    let quantityTotal = 0;
+
+    for (let i = 0; i < produitLocalStorage.length; i++) {
+        quantityTotal += produitLocalStorage[i].quantiteProduit;
+    }
+
+    let productTotalQuantity = document.getElementById("totalQuantity");
+    productTotalQuantity.innerHTML = quantityTotal;
+    console.log(quantityTotal);
+}
+getTotalsQtt();
+
 function getCart(){
     
     //Si panier vide
     if (produitLocalStorage === null || produitLocalStorage == 0) {
         const emptyCart = `<p>Votre panier est vide!</p>`;
         positionEmptyCart.innerHTML = emptyCart;
-    } else {
+    }
+     else {
         //Si 1 ou + articles boucle 
      for (let produit in produitLocalStorage){
          fetch("http://localhost:3000/api/products/" + produitLocalStorage[produit].idProduit)
@@ -23,18 +40,20 @@ function getCart(){
             produitLocalStorage [produit].altImgProduit = product.altTxt
             produitLocalStorage [produit].nomProduit = product.name
             totalPrice += product.price*produitLocalStorage[produit].quantiteProduit
-
+            
            // Recup prix total
 
-            if (produit == (produitLocalStorage.length -1)) {
+            if (produit == (produitLocalStorage.length -1)) { //On recupere la valeur du prix de la dernière ligne
                document.getElementById ("totalPrice").innerHTML = totalPrice
               
             }
+            //Insertion de article et de ses attributs
             
              let productArticle = document.createElement("article");
              document.querySelector("#cart__items").appendChild(productArticle);
              productArticle.className = "cart__item";
              productArticle.setAttribute('data-id', produitLocalStorage[produit].idProduit);
+             productArticle.setAttribute('data-color', produitLocalStorage[produit].couleurProduit);
          
              // Insertion de "div"
              let productDivImg = document.createElement("div");
@@ -106,7 +125,9 @@ function getCart(){
              productItemContentSettingsDelete.appendChild(productSupprimer);
              productSupprimer.className = "deleteItem";
              productSupprimer.innerHTML = "Supprimer";
-             
+            
+             deleteProduct();
+             changeQtt();
          }
          
             )
@@ -116,4 +137,70 @@ function getCart(){
     }}
     getCart();
     
-    // Pour modifier la quantité du panier
+
+    // Pour supprimer un article panier
+
+    function deleteProduct() {
+        console.log(deleteProduct)
+        let btn_supprimer = document.querySelectorAll(".deleteItem");
+
+    //On observe le click de suppression d'un article
+
+        for (let j = 0; j < btn_supprimer.length; j++){
+            btn_supprimer[j].addEventListener("click" , (event) => {
+                event.preventDefault();
+    
+                //Selection de l'element à supprimer en fonction de son id ET sa couleur
+                let idSuppr = btn_supprimer[j].closest("article").dataset.id;
+                let colorSuppr = btn_supprimer[j].closest("article").dataset.color;
+    
+                produitLocalStorage = produitLocalStorage.filter( el => el.idProduit !== idSuppr || el.couleurProduit !== colorSuppr );
+                
+                localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+
+                //Quand localStorage vide, le panier est vide
+                if (produitLocalStorage.length === 0) {
+                    localStorage.clear();
+                
+                }
+                //
+                window.location.reload()
+            })
+        }
+    }
+    // Pour modifier les quantités du panier
+
+    function changeQtt() {
+      let quantitySelector = document.querySelectorAll (".itemQuantity");
+
+// On observe le changement de quantité
+
+      for (let k = 0; k< quantitySelector.length;k++){
+          quantitySelector[k].addEventListener("change", (event) =>{
+              event.preventDefault();
+
+              // On se positionne et cible l'element que l'on veut supprimer
+              let idSuppr = quantitySelector[k].closest("article").dataset.id;
+                let colorSuppr = quantitySelector[k].closest("article").dataset.color;
+
+                produitLocalStorage = produitLocalStorage.map (el =>{
+                    if (el.idProduit === idSuppr && el.couleurProduit === colorSuppr)
+                    {
+                        return {
+                            ...el,
+                            quantiteProduit:parseInt(event.target.value)
+                        }
+                    }else{
+                        return el
+                    } 
+                })
+                localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+                window.location.reload()
+          })
+      }
+
+
+    }
+
+    
+  
