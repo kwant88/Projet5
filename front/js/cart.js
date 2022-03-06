@@ -202,5 +202,50 @@ function getCart(){
 
     }
 
-    
+   // On construit un formulaire avec des fonctions régulières (regex)
+   
+   function formuGet() {
+
+    let form = document.querySelector (".cart_order_form");
+
+    //On écoute les modifs du formulaire
+
+    form.firstName.addEventListener('change',function() {
+        validFirstName(this);
+    });
+
+    form.lastName.addEventListener('change', function () {
+        validLastName(this);
+    });
+
+    form.address.addEventListener('change', function () {
+        validAddress(this);
+    });
+
+    form.city.addEventListener('change', function () {
+        validCity(this);
+    });
+
+    form.email.addEventListener('change', function () {
+        validEmail(this);
+    });
+
+//On controle les entrées du formulaire
+
+let validnameRegExp = new RegExp ("^[a-zA-Z ,.'-]+$")
+
+const validFirstName = function (inputFirstName){
+    let firstNameErrorMsg = inputFirstName.nextElementSibling;
+
+    if (validnameRegExp.test(inputFirstName.value)){
+        firstNameErrorMsg.innerHTML = '';
+    }
+else {
+    firstNameErrorMsg.innerHTML = "Saisie invalide.Veuillez réessayer"
+}
+    }
+
+}
+
+   
   
