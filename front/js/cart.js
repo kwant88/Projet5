@@ -204,9 +204,13 @@ function getCart(){
 
    // On construit un formulaire avec des fonctions régulières (regex)
    
+    let validNameRegExp = new RegExp ("^[a-zA-Z ,.'-]+$");
+    let emailRegExp = new RegExp ("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$");
+    let addressRegExp = new RegExp ("^([0-9]*) ?([a-zA-Z,\. ]*)$");
+
    function formuGet() {
 
-    let form = document.querySelector (".cart_order_form");
+    let form = document.querySelector (".cart__order__form");
 
     //On écoute les modifs du formulaire
 
@@ -232,20 +236,116 @@ function getCart(){
 
 //On controle les entrées du formulaire
 
-let validnameRegExp = new RegExp ("^[a-zA-Z ,.'-]+$")
 
-const validFirstName = function (inputFirstName){
+const validFirstName = function(inputFirstName){
+    
     let firstNameErrorMsg = inputFirstName.nextElementSibling;
 
-    if (validnameRegExp.test(inputFirstName.value)){
+    if (validNameRegExp.test(inputFirstName.value)){
         firstNameErrorMsg.innerHTML = '';
     }
 else {
-    firstNameErrorMsg.innerHTML = "Saisie invalide.Veuillez réessayer"
+    firstNameErrorMsg.innerHTML = "Saisie invalide.Veuillez réessayer."
 }
+    };
+
+    const validLastName = function (inputLastName) {
+        let lastNameErrorMsg = inputLastName.nextElementSibling;
+
+        if (validNameRegExp.test(inputLastName.value)) {
+            lastNameErrorMsg.innerHTML = '';
+        } else {
+            lastNameErrorMsg.innerHTML = 'Saisie invalide.Veuillez réessayer.';
+        }
+    };
+
+    const validAddress = function (inputAddress) {
+        let addressErrorMsg = inputAddress.nextElementSibling;
+
+        if (addressRegExp.test(inputAddress.value)) {
+            addressErrorMsg.innerHTML = '';
+        } else {
+            addressErrorMsg.innerHTML = 'Saisie invalide.Veuillez réessayer.';
+        }
+    };
+
+    const validCity = function (inputCity) {
+        let cityErrorMsg = inputCity.nextElementSibling;
+
+        if (validNameRegExp.test(inputCity.value)) {
+            cityErrorMsg.innerHTML = '';
+        } else {
+            cityErrorMsg.innerHTML = 'Saisie invalide.Veuillez réessayer.';
+        }
+    };
+
+    const validEmail = function (inputEmail) {
+        let emailErrorMsg = inputEmail.nextElementSibling;
+
+        if (emailRegExp.test(inputEmail.value)) {
+            emailErrorMsg.innerHTML = '';
+        } else {
+            emailErrorMsg.innerHTML = 'Saisie invalide.Veuillez réessayer.';
+        }
+    };
+
+}
+formuGet();
+console.log(formuGet);
+   
+  //On envoie le formulaire au localstorage
+
+  function formuSend() {
+
+    const order =document.getElementById ('order');
+    order.addEventListener('click',(event) => {
+        event.preventDefault();
+
+        //On récupère les infos client
+        let inputName = document.getElementById('firstName');
+        let inputLastName = document.getElementById('lastName');
+        let inputAddress = document.getElementById('address');
+        let inputCity = document.getElementById('city');
+        let inputMail = document.getElementById('email');
+    
+  //On construit un array du LS
+
+        let products = [];
+        for (let i = 0; i<produitLocalStorage.length;i++) {
+            products.push(produitLocalStorage[i].idProduit);
+        }
+        console.log(products);
+
+        const order = {
+            contact : {
+                firstName: inputName.value,
+                lastName: inputLastName.value,
+                address: inputAddress.value,
+                city: inputCity.value,
+                email: inputMail.value,
+            },
+            products: products,
+        } 
+
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(order),
+            headers: { 
+                "Content-Type": "application/json" 
+            },
+        };
+console.log(options)
+        fetch("http://localhost:3000/api/products/order", options)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            localStorage.clear();
+            localStorage.setItem("orderId", data.orderId);
+
+            document.location.href = "confirmation.html?id" + data.orderId;
+        })
     }
 
-}
-
-   
-  
+    )
+  }
+formuSend();
