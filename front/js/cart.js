@@ -5,21 +5,7 @@ const positionEmptyCart = document.querySelector("#cart__items");
 
 let totalPrice = 0
 
-function getTotalsQtt() {
-    // Total des quantités
-    
-    
-    let quantityTotal = 0;
 
-    for (let i = 0; i < produitLocalStorage.length; i++) {
-        quantityTotal += produitLocalStorage[i].quantiteProduit;
-    }
-
-    let productTotalQuantity = document.getElementById("totalQuantity");
-    productTotalQuantity.innerHTML = quantityTotal;
-    console.log(quantityTotal);
-}
-getTotalsQtt();
 
 function getCart(){
     
@@ -137,6 +123,21 @@ function getCart(){
     }}
     getCart();
     
+    function getTotalsQtt() {
+        // Total des quantités
+        
+        
+        let quantityTotal = 0;
+    
+        for (let i = 0; i < produitLocalStorage.length; i++) {
+            quantityTotal += produitLocalStorage[i].quantiteProduit;
+        }
+    
+        let productTotalQuantity = document.getElementById("totalQuantity");
+        productTotalQuantity.innerHTML = quantityTotal;
+        console.log(quantityTotal);
+    }
+    getTotalsQtt();
 
     // Pour supprimer un article panier
 
@@ -326,7 +327,7 @@ console.log(formuGet);
             },
             products: products,
         } 
-
+//On envoie les infos (contact+products) au serveur
         const options = {
             method: 'POST',
             body: JSON.stringify(order),
@@ -334,6 +335,8 @@ console.log(formuGet);
                 "Content-Type": "application/json" 
             },
         };
+
+//Et ensuite on redirige l'utilisateur vers la page confirmation
 console.log(options)
         fetch("http://localhost:3000/api/products/order", options)
         .then((response) => response.json())
@@ -342,7 +345,7 @@ console.log(options)
             localStorage.clear();
             localStorage.setItem("orderId", data.orderId);
 
-            document.location.href = "confirmation.html?id" + data.orderId;
+            document.location.href = "confirmation.html";
         })
     }
 
