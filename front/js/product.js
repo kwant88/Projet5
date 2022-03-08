@@ -1,56 +1,49 @@
 // Récupération paramètres URL
-var str = window.location.href; //Recup URL
+
+var str = window.location.href;
 var url = new URL(str); 
 var idProduct = url.searchParams.get("id"); 
-
-
-
-async function getArticle() {
-    
-    let articles = await fetch("http://localhost:3000/api/products/" + idProduct)
-        return await articles.json();
-
-}
 
 
 const title = document.getElementById('title');
 const price = document.getElementById('price');
 const description = document.getElementById('description');
 const colors = document.getElementById('colors');
-
-//Recup id image
-getArticle()
-.then(function(product){
 const items = document.querySelector (".item__img")
-items.innerHTML=`<img src="${product.imageUrl}" alt="${product.altTxt}">`
-})
 
-//Données produits
+//On récupère les données produits avec l'URL  et idProduct
 
-getArticle()
-
-fetch("http://localhost:3000/api/products/" + idProduct)
+async function getArticle() {
+    
+    fetch("http://localhost:3000/api/products/" + idProduct)
 .then((response) => response.json())
 .then(product => {
     title.innerHTML = `<h1>${product.name}</h1>`;
     price.innerHTML = `${product.price}`;
     description.innerHTML = `${product.description}`;
-    
+    items.innerHTML=`<img src="${product.imageUrl}" alt="${product.altTxt}">`
+
+    //On accède au choix des couleurs
+
     for (let i=0; i < product.colors.length; i++) {
         var color = product.colors[i]
-        console.log(color)
       colors.innerHTML += `<option value="${color}">${color}</option> `
     }
 
 
     var bouton = document.getElementById("addToCart");
 
-    bouton.addEventListener("click",function(){ //On surveille les clicks du bouton panier
+    //On surveille les clicks du bouton panier de l'utilisateur
+
+    bouton.addEventListener("click",function(){ 
        
        if (colors.value === ""){
            alert ("Veuillez choisir une couleur")
            return 
        }
+
+//On crée les conditions de la quantité produit pour éviter des erreurs
+
 const quantity = document.getElementById("quantity");
     if (quantity.value <=0 ){
     alert ("Veuillez insérer un nombre supérieur à 0")  
@@ -60,6 +53,7 @@ else if (quantity.value >100){
     alert ("Veuillez insérer un nombre inférieur à 100")
     return
 };
+//On crée un array avec seulement l'id produit, sa couleur et quantité
 
 let choixProduit = {
     idProduit: idProduct,
@@ -67,39 +61,53 @@ let choixProduit = {
     quantiteProduit: parseInt(quantity.value),
     
 };
-    console.log(idProduct, colors.value, product.name, product.price, quantity, product.imageUrl, product.altTxt);
 
 //Initialisation du local storage
+//On transforme les données en objet javascript
 
-let produitLocalStorage = JSON.parse(localStorage.getItem("produit")); //On transforme l'objet en chaine de caractères
-console.log(produitLocalStorage)
-if (!produitLocalStorage){  //Si produit non déclaré alors tableau vide
+let produitLocalStorage = JSON.parse(localStorage.getItem("produit")); 
+
+//Si produit non déclaré alors tableau vide
+
+if (!produitLocalStorage){  
 produitLocalStorage =[]
 }
+//Si produit trouvé, on vérifie que le produit et sa couleur ne sont pas déja stockés dans le LS
+//Si produit trouvé , on ajoute juste la quantité
     const foundProduct = produitLocalStorage.find((produit) => {
         if (produit.couleurProduit === colors.value && produit.idProduit === idProduct)
         {
             return produit
         }
     } )
-    console.log(foundProduct)
     if(foundProduct){
 
 foundProduct.quantiteProduit +=parseInt(quantity.value)
  
     }
+    //On stocke les datas dans le local storage
 else {  
     produitLocalStorage.push(choixProduit)
 }
-localStorage.setItem ("produit",JSON.stringify(produitLocalStorage)) //On met a jour le local storage
+//On met a jour le local storage.On transforme l'objet json en chaine de caractères
+
+localStorage.setItem ("produit",JSON.stringify(produitLocalStorage)) 
 
       alert('Le produit a été ajouté au panier');
     
     })
 
-    
-
 }
 
-);          
+);  
+}
+
+getArticle()
+
+
+
+
+
+
+        
 

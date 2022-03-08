@@ -9,18 +9,18 @@ let totalPrice = 0
 
 function getCart(){
     
-    //Si panier vide
+    //Si panier vide, afficher le message "panier vide"
     if (produitLocalStorage === null || produitLocalStorage == 0) {
         const emptyCart = `<p>Votre panier est vide!</p>`;
         positionEmptyCart.innerHTML = emptyCart;
     }
      else {
-        //Si 1 ou + articles boucle 
+        //Si 1 ou + articles dans panier, on intègre les différents éléments dans le panier
      for (let produit in produitLocalStorage){
          fetch("http://localhost:3000/api/products/" + produitLocalStorage[produit].idProduit)
          .then ((response) => response.json())
          .then (product =>{
-             console.log(product)
+
              produitLocalStorage[produit].prixProduit =product.price
             produitLocalStorage [produit].imgProduit = product.imageUrl
             produitLocalStorage [produit].altImgProduit = product.altTxt
@@ -73,7 +73,6 @@ function getCart(){
          
              // Insertion du prix
              let productPrice = document.createElement("p");
-             console.log (productPrice);
              productItemContentTitlePrice.appendChild(productPrice);
              productPrice.innerHTML = produitLocalStorage[produit].prixProduit + " €";
          
@@ -117,7 +116,7 @@ function getCart(){
          }
          
             )
-            console.log(produit)
+            
      }
      
     }}
@@ -135,14 +134,13 @@ function getCart(){
     
         let productTotalQuantity = document.getElementById("totalQuantity");
         productTotalQuantity.innerHTML = quantityTotal;
-        console.log(quantityTotal);
+        
     }
     getTotalsQtt();
 
     // Pour supprimer un article panier
 
     function deleteProduct() {
-        console.log(deleteProduct)
         let btn_supprimer = document.querySelectorAll(".deleteItem");
 
     //On observe le click de suppression d'un article
@@ -292,9 +290,9 @@ else {
 
 }
 formuGet();
-console.log(formuGet);
+
    
-  //On envoie le formulaire au localstorage
+  //On envoie le formulaire au localstorage une fois que les entrées sont vérifiées
 
   function formuSend() {
 
@@ -315,7 +313,6 @@ console.log(formuGet);
         for (let i = 0; i<produitLocalStorage.length;i++) {
             products.push(produitLocalStorage[i].idProduit);
         }
-        console.log(products);
 
         const order = {
             contact : {
@@ -332,16 +329,15 @@ console.log(formuGet);
             method: 'POST',
             body: JSON.stringify(order),
             headers: { 
-                "Content-Type": "application/json" 
+                "Content-Type": "application/json" //Il faut parser le json pour le backend
             },
         };
 
 //Et ensuite on redirige l'utilisateur vers la page confirmation
-console.log(options)
+
         fetch("http://localhost:3000/api/products/order", options)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
             localStorage.clear();
             localStorage.setItem("orderId", data.orderId);
 
