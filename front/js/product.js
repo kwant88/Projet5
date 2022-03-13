@@ -9,7 +9,7 @@ const title = document.getElementById('title');
 const price = document.getElementById('price');
 const description = document.getElementById('description');
 const colors = document.getElementById('colors');
-const items = document.querySelector (".item__img")
+const items = document.querySelector (".item__img");
 
 //On récupère les données produits avec l'URL  et idProduct
 
@@ -25,7 +25,7 @@ async function getArticle()
         description.innerHTML = `${product.description}`;
         items.innerHTML=`<img src="${product.imageUrl}" alt="${product.altTxt}">`
 
-//On accède au choix des couleurs
+    //On accède au choix des couleurs
 
     for (let i=0; i < product.colors.length; i++) 
     {
@@ -36,7 +36,7 @@ async function getArticle()
 
     var bouton = document.getElementById("addToCart");
 
-//On surveille les clicks du bouton panier de l'utilisateur
+    //On surveille les clicks du bouton panier de l'utilisateur
 
     bouton.addEventListener("click",function()
     { 
@@ -53,12 +53,12 @@ const quantity = document.getElementById("quantity");
 
 if (quantity.value <=0 )
 {
-    alert ("Veuillez insérer un nombre supérieur à 0")  
+    alert ("Veuillez insérer un nombre supérieur à 0");
     return  
 }
 else if (quantity.value >100)
 {
-    alert ("Veuillez insérer un nombre inférieur à 100")
+    alert ("Veuillez insérer un nombre inférieur à 100");
     return
 };
 //On crée un array avec seulement l'id produit, sa couleur et quantité

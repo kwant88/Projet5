@@ -3,7 +3,7 @@
 let produitLocalStorage = JSON.parse (localStorage.getItem("produit"));
 const positionEmptyCart = document.querySelector("#cart__items");
 
-let totalPrice = 0
+let totalPrice = 0;
 
 
 
@@ -33,7 +33,8 @@ for (let produit in produitLocalStorage)
 
  // Recup prix total
 
-if (produit == (produitLocalStorage.length -1)) { //On recupere la valeur du prix de la dernière ligne
+if (produit == (produitLocalStorage.length -1)) 
+{ //On recupere la valeur du prix de la dernière ligne
  document.getElementById ("totalPrice").innerHTML = totalPrice
 
 }
@@ -93,7 +94,16 @@ productItemContentSettingsQuantity.className = "cart__item__content__settings__q
 let productQte = document.createElement("p");
 productItemContentSettingsQuantity.appendChild(productQte);
 productQte.innerHTML = "Quantité : ";
-
+if (productQte.value <=0 )
+{
+    alert ("Veuillez insérer un nombre supérieur à 0");
+    return  
+}
+else if (productQte.value >100)
+{
+    alert ("Veuillez insérer un nombre inférieur à 100");
+    return
+};
 // Insertion des attributs de quantité
 let productQuantity = document.createElement("input");
 productItemContentSettingsQuantity.appendChild(productQuantity);
@@ -103,6 +113,17 @@ productQuantity.setAttribute("type", "number");
 productQuantity.setAttribute("min", "1");
 productQuantity.setAttribute("max", "100");
 productQuantity.setAttribute("name", "itemQuantity");
+
+if (productQuantity.value <=0 )
+{
+    alert ("Veuillez insérer un nombre supérieur à 0");
+    return  
+}
+else if (productQuantity.value >100)
+{
+    alert ("Veuillez insérer un nombre inférieur à 100");
+    return
+};
 
 // Insertion de "div"
 let productItemContentSettingsDelete = document.createElement("div");
@@ -126,15 +147,15 @@ changeQtt();
 }}
 getCart();
 
+// Total des quantités
+
 function getTotalsQtt() 
 {
- // Total des quantités
-
-
+ 
  let quantityTotal = 0;
 
  for (let i = 0; i < produitLocalStorage.length; i++) 
- {
+{
     quantityTotal += produitLocalStorage[i].quantiteProduit;
 }
 
@@ -182,7 +203,7 @@ let btn_supprimer = document.querySelectorAll(".deleteItem");
     function changeQtt() 
     {
       let quantitySelector = document.querySelectorAll (".itemQuantity");
-
+      
 // On observe le changement de quantité
 
 for (let k = 0; k< quantitySelector.length;k++)
@@ -192,7 +213,7 @@ for (let k = 0; k< quantitySelector.length;k++)
       event.preventDefault();
       
       
-// On se positionne et cible l'element que l'on veut supprimer
+            // On se positionne et cible l'element que l'on veut supprimer
               let idSuppr = quantitySelector[k].closest("article").dataset.id;
               let colorSuppr = quantitySelector[k].closest("article").dataset.color;
 
@@ -219,7 +240,7 @@ for (let k = 0; k< quantitySelector.length;k++)
 
 }
 
-// On construit un formulaire avec des fonctions régulières (regex)
+    // On construit un formulaire avec des fonctions régulières (regex)
    
    let validNameRegExp = new RegExp ("^[a-zA-Z ,.'-]+$");
    let emailRegExp = new RegExp ("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$");
@@ -230,7 +251,7 @@ for (let k = 0; k< quantitySelector.length;k++)
 
     let form = document.querySelector (".cart__order__form");
 
-//On écoute les modifs du formulaire
+    //On écoute les modifs du formulaire
 
     form.firstName.addEventListener('change',function() 
     {
@@ -372,7 +393,7 @@ const options =
     body: JSON.stringify(order),
     headers: 
     { 
-                "Content-Type": "application/json" //Il faut parser le json pour le backend
+                "Content-Type": "application/json" 
             },
         };
 
