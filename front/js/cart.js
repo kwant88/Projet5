@@ -114,16 +114,7 @@ productQuantity.setAttribute("min", "1");
 productQuantity.setAttribute("max", "100");
 productQuantity.setAttribute("name", "itemQuantity");
 
-if (productQuantity.value <=0 )
-{
-    alert ("Veuillez insérer un nombre supérieur à 0");
-    return  
-}
-else if (productQuantity.value >100)
-{
-    alert ("Veuillez insérer un nombre inférieur à 100");
-    return
-};
+
 
 // Insertion de "div"
 let productItemContentSettingsDelete = document.createElement("div");
@@ -212,6 +203,16 @@ for (let k = 0; k< quantitySelector.length;k++)
   {
       event.preventDefault();
       
+      if (event.target.value <=0 )
+{
+    alert ("Veuillez insérer un nombre supérieur à 0");
+    return  
+}
+else if (event.target.value >100)
+{
+    alert ("Veuillez insérer un nombre inférieur à 100");
+    return
+};
       
             // On se positionne et cible l'element que l'on veut supprimer
               let idSuppr = quantitySelector[k].closest("article").dataset.id;
